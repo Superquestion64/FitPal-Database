@@ -1,0 +1,162 @@
+﻿Name: Charles Vega and Melissa Jesmin
+Description: This document will illustrate the steps we took to normalize our database.
+
+Problem Statement:
+Our project is about motivating people to start their fitness journey and to help people workout at any place they feel comfortable. 
+We decided to create an app called Fit Pal which will help people meet specific fitness goals by providing users with personalized information for their workout routines and progress.
+
+Attribute Catalog:
+Since this app is based on its users we need more information on our users. Our users are the consumers in the attribute catalog. 
+We need the consumers email, height, weight, age, fitness goal, fitness routines, and the level of fitness. 
+These are our attributes in the attribute catalog as:
+consumer_height
+consumer_weight
+consumer_age
+consumer_goal
+consumer_routine
+consumer_fitness
+consumer_email
+consumer_progress
+consumer_schedule
+consumer_check
+
+Besides information on the consumers, we also need to have attributes on the vendor such as email, phone number and address. 
+We wrote it in our attribute catalog as:
+vendor
+vendor_phone
+vendor_address
+vendor_email
+
+We made consumer_goal, consumer_routine and consumer_fitness non-atomic because there is multiple data for them. 
+Vendor and consumer are primary keys. There are currently no foreign keys. 
+
+1NF:
+Now that we have our attribute catalog, we look for any attributes that are non-atomic. 
+In our attribute catalog consumer_goal, consumer_routine and consumer_fitness are non-atomic. 
+Then, we make these three attributes atomic. We did this by separating them into more attributes. 
+For consumer_goal, we separated it into: 
+goal_id
+goal
+consumer_id
+goal_id
+
+For consumer_routine, we separated it into: 
+routine_id
+routine
+consumer_id
+routine_id
+
+For consumer_fitness, we separated it into: 
+fit_id
+fitness_level
+consumer_id
+fit_id
+
+For consumers we now have:
+consumer_id
+consumer_first
+consumer_last
+consumer_email
+consumer_height
+consumer_weight
+consumer_age
+
+And the vendor stays the same. 
+
+2NF:
+We now have our 1NF and we also have partial dependencies. 
+We now create five tables which are vendor, consumer, goals, routine, and fit level. 
+
+The vendor table contains: 
+vendor
+vendor_phone
+vendor_address
+vendor_email
+
+In this table, vendor is the primary key.
+
+The consumer table contains:
+consumer_id
+consumer_first
+consumer_last
+consumer_email
+consumer_height
+consumer_weight
+consumer_age
+
+In this table, consumer_id is the primary key. 
+
+The goals table contains:
+goal_id
+goal
+consumer_id
+goal_id
+
+In this table, the first goal_id and consumer_id are the primary keys. 
+Also, consumer_id and last goal_id are foreign keys. 
+
+The routine table contains:
+routine_id
+routine
+consumer_id
+routine_id
+
+In this table, the first routine_id and consumer_id are the primary keys. 
+Also, consumer_id and last routine_id are foreign keys. 
+
+The fit level table contains:
+fit_id
+fitness_level
+consumer_id
+fit_id
+
+In this table, the first fit_id and consumer_id are the primary keys. Also, consumer_id and last fit_id are foreign keys
+
+3NF:
+Now that we have our 2NF and we have transitive dependencies, we decided to separate the tables even more. We made six new tables which are goals, routines, fit_levels, goal_defines, routine_defines and fit_defines. 
+
+The goals table contains: 
+consumer_id
+goal_id
+
+In this table, the consumer_id is the primary key. Also, consumer_id and goal_id are foreign keys. 
+
+The routines table contains:
+consumer_id
+routine_id
+
+In this table, the consumer_id is the primary key. Also, consumer_id and routine_id are foreign keys. 
+
+The fit_levels table contains:
+consumer_id
+fit_id
+
+In this table, the consumer_id is the primary key. Also, consumer_id and fit_id are foreign keys. 
+
+For the first three tables, we decided to keep the ids together. The consumer_id will get the user while the goal_id will show what the user’s goal is. Same thing for routine_id and fit_id which will show what routine the user wants and what level of fitness the user wants. 
+
+The goal_defines table contains: 
+goal_id
+goal
+
+In this table, the goal_id is the primary key.
+
+The routine_defines table contains:
+routine_id
+routine
+
+In this table, the routine_id is the primary key. 
+
+The fit_defines table contains:
+fit_id
+fitness_level
+
+In this table, the fit_id is the primary key. 
+
+For the rest of the tables, we put what defines each table type together such as goal_id and goal for goal_defines. 
+Same thing for routine_defines and fit_defines. 
+We make goal_id, routine_id and fit_id using int because we will be keeping track of different types of goals, routines and fitness levels using numbers. Each number will have its own type. 
+
+The goal, routine and flevel in the goal_defines, routine_defines, fit_defines tables will have the name of the type of goals, routines and fitness levels the users can do while the ids will have the numbers representing those types. 
+
+The vendor table and consumer table stays the same from 2NF since it has no transitive dependency. 
